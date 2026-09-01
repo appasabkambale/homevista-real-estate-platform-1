@@ -29,5 +29,33 @@ service cloud.firestore {
         request.auth.token.email == resource.data.userEmail
       );
     }
+
+    // Conversations collection
+    match /conversations/{conversationId} {
+      allow read: if request.auth != null && (
+        resource.data.buyerId == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.buyerEmail == request.auth.token.email ||
+        resource.data.ownerEmail == request.auth.token.email
+      );
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && (
+        resource.data.buyerId == request.auth.uid ||
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.buyerEmail == request.auth.token.email ||
+        resource.data.ownerEmail == request.auth.token.email
+      );
+      allow delete: if request.auth != null && (
+        resource.data.ownerId == request.auth.uid ||
+        resource.data.buyerId == request.auth.uid
+      );
+
+      // Subcollection messages
+      match /messages/{messageId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null;
+        allow update, delete: if request.auth != null && resource.data.senderId == request.auth.uid;
+      }
+    }
   }
 }

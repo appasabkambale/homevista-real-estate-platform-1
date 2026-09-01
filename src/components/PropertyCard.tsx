@@ -1,8 +1,9 @@
 import React from 'react';
-import { Heart, MapPin, Bed, Bath, Maximize2, Calendar, Edit3, Trash2, ShieldCheck, LandPlot } from 'lucide-react';
+import { Heart, MapPin, Bed, Bath, Maximize2, Calendar, Edit3, Trash2, ShieldCheck, LandPlot, Footprints, MessageSquare } from 'lucide-react';
 import { Property } from '../types';
 import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
+import { useChat } from '../context/ChatContext';
 
 interface PropertyCardProps {
   property: Property;
@@ -20,6 +21,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     deleteProperty
   } = useProperties();
   const { user } = useAuth();
+  const { startOrOpenConversation } = useChat();
 
   const isOwner = user && (property.ownerId === user.uid || property.ownerEmail === user.email);
   const favorited = isFavorite(property.id);
@@ -91,20 +93,42 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </span>
         </div>
 
-        {/* Favorite Heart Button matching reference */}
-        <button
-          id={`favorite-btn-${property.id}`}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleFavorite(property.id);
-          }}
-          className={`absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center shadow-md transition-all hover:bg-white hover:scale-110 cursor-pointer ${
-            favorited ? 'text-rose-500' : 'text-slate-600 hover:text-rose-500'
-          }`}
-          aria-label="Save Property"
-        >
-          <Heart className={`w-4 h-4 ${favorited ? 'fill-rose-500' : ''}`} />
-        </button>
+        {/* Action Buttons: Message Agent + Favorite */}
+        <div className="absolute top-3.5 right-3.5 flex items-center gap-1.5">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              startOrOpenConversation(property);
+            }}
+            className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center shadow-md transition-all hover:bg-emerald-600 hover:text-white text-slate-700 hover:scale-110 cursor-pointer"
+            title="Chat with Agent / Owner"
+            aria-label="Direct Message"
+          >
+            <MessageSquare className="w-4 h-4" />
+          </button>
+          
+          <button
+            id={`favorite-btn-${property.id}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFavorite(property.id);
+            }}
+            className={`w-9 h-9 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center shadow-md transition-all hover:bg-white hover:scale-110 cursor-pointer ${
+              favorited ? 'text-rose-500' : 'text-slate-600 hover:text-rose-500'
+            }`}
+            aria-label="Save Property"
+          >
+            <Heart className={`w-4 h-4 ${favorited ? 'fill-rose-500' : ''}`} />
+          </button>
+        </div>
+
+        {/* WalkScore Badge */}
+        {property.neighborhoodRadar && (
+          <div className="absolute bottom-3 right-3 bg-slate-950/80 backdrop-blur-md text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm border border-white/10">
+            <Footprints className="w-3 h-3 text-emerald-400" />
+            <span>Walk {property.neighborhoodRadar.walkScore}</span>
+          </div>
+        )}
 
         {/* Owner Indicator */}
         {isOwner && (

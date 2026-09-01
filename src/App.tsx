@@ -1,6 +1,7 @@
 import React from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { PropertyProvider } from './context/PropertyContext';
+import { ChatProvider } from './context/ChatContext';
 import { TopBar } from './components/TopBar';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -17,44 +18,56 @@ import { AddEditPropertyModal } from './components/AddEditPropertyModal';
 import { MyPropertiesModal } from './components/MyPropertiesModal';
 import { MyBookingsModal } from './components/MyBookingsModal';
 import { FavoritesModal } from './components/FavoritesModal';
+import { ChatModal } from './components/ChatModal';
+import { AskQuestionModal } from './components/AskQuestionModal';
+import { MakeOfferModal } from './components/MakeOfferModal';
+import { FloatingChatButton } from './components/FloatingChatButton';
 import { Toast } from './components/Toast';
 
 export default function App() {
   return (
     <AuthProvider>
       <PropertyProvider>
-        <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-emerald-600 selection:text-white">
-          {/* Top Banner Contact bar */}
-          <TopBar />
+        <ChatProvider>
+          <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-emerald-600 selection:text-white">
+            {/* Top Banner Contact bar */}
+            <TopBar />
 
-          {/* Main Navigation */}
-          <Navbar />
+            {/* Main Navigation */}
+            <Navbar />
 
-          {/* Main Website Sections matching reference */}
-          <main className="flex-1">
-            <HeroSection />
-            <PropertyTypesSection />
-            <FeaturedPropertiesSection />
-            <WhyChooseUsSection />
-            <TestimonialsSection />
-            <NewsletterSection />
-          </main>
+            {/* Main Website Sections matching reference */}
+            <main className="flex-1">
+              <HeroSection />
+              <PropertyTypesSection />
+              <FeaturedPropertiesSection />
+              <WhyChooseUsSection />
+              <TestimonialsSection />
+              <NewsletterSection />
+            </main>
 
-          {/* Footer */}
-          <Footer />
+            {/* Footer */}
+            <Footer />
 
-          {/* Interactive Modals & Dashboards */}
-          <AuthModal />
-          <PropertyDetailModal />
-          <BookingModal />
-          <AddEditPropertyModal />
-          <MyPropertiesModal />
-          <MyBookingsModal />
-          <FavoritesModal />
+            {/* Interactive Modals & Dashboards */}
+            <AuthModal />
+            <PropertyDetailModal />
+            <BookingModal />
+            <AddEditPropertyModal />
+            <MyPropertiesModal />
+            <MyBookingsModal />
+            <FavoritesModal />
 
-          {/* Floating Toast Notification */}
-          <Toast />
-        </div>
+            {/* Real-Time Messaging & Negotiation Modals */}
+            <ChatModal />
+            <AskQuestionModal />
+            <MakeOfferModal />
+            <FloatingChatButton />
+
+            {/* Floating Toast Notification */}
+            <Toast />
+          </div>
+        </ChatProvider>
       </PropertyProvider>
     </AuthProvider>
   );

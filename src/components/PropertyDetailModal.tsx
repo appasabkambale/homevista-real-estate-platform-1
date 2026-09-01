@@ -15,10 +15,16 @@ import {
   Trash2, 
   Share2,
   Building,
-  LandPlot
+  LandPlot,
+  MessageSquare,
+  DollarSign,
+  HelpCircle,
+  Sparkles
 } from 'lucide-react';
 import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
+import { useChat } from '../context/ChatContext';
+import { NeighborhoodRadarSection } from './NeighborhoodRadarSection';
 
 export const PropertyDetailModal: React.FC = () => {
   const { 
@@ -34,6 +40,7 @@ export const PropertyDetailModal: React.FC = () => {
     showToast
   } = useProperties();
   const { user } = useAuth();
+  const { startOrOpenConversation, openMakeOfferModal, openAskQuestionModal } = useChat();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
@@ -259,6 +266,9 @@ export const PropertyDetailModal: React.FC = () => {
             </div>
           )}
 
+          {/* Neighborhood Radar & WalkScore Section */}
+          <NeighborhoodRadarSection property={selectedProperty} />
+
           {/* Listed By / Agent Contact */}
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
@@ -280,18 +290,28 @@ export const PropertyDetailModal: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  startOrOpenConversation(selectedProperty);
+                }}
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Live Chat</span>
+              </button>
               <a
                 href={`mailto:${selectedProperty.ownerEmail}?subject=Inquiry regarding ${encodeURIComponent(selectedProperty.title)}`}
-                className="flex-1 sm:flex-none px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
+                className="flex-1 sm:flex-none px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
               >
                 <Mail className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Email Agent</span>
+                <span>Email</span>
               </a>
               {selectedProperty.ownerPhone && (
                 <a
                   href={`tel:${selectedProperty.ownerPhone}`}
-                  className="flex-1 sm:flex-none px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
+                  className="flex-1 sm:flex-none px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
                 >
                   <Phone className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Call</span>
@@ -303,8 +323,8 @@ export const PropertyDetailModal: React.FC = () => {
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-2 w-full md:w-auto">
             {isOwner && (
               <>
                 <button
@@ -312,14 +332,14 @@ export const PropertyDetailModal: React.FC = () => {
                     setPropertyToEdit(selectedProperty);
                     setIsEditModalOpen(true);
                   }}
-                  className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Edit Property</span>
                 </button>
                 <button
                   onClick={handleDelete}
-                  className="flex-1 sm:flex-none px-4 py-2.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  className="flex-1 md:flex-none px-4 py-2.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Delete</span>
@@ -328,20 +348,34 @@ export const PropertyDetailModal: React.FC = () => {
             )}
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-end">
             <button
               onClick={() => setSelectedProperty(null)}
-              className="px-5 py-2.5 text-slate-600 hover:text-slate-900 text-xs font-semibold rounded-xl cursor-pointer"
+              className="px-3.5 py-2.5 text-slate-600 hover:text-slate-900 text-xs font-semibold rounded-xl cursor-pointer"
             >
               Close
             </button>
             <button
+              onClick={() => openAskQuestionModal(selectedProperty)}
+              className="flex-1 sm:flex-none px-4 py-2.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-800 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Ask Question</span>
+            </button>
+            <button
+              onClick={() => openMakeOfferModal(selectedProperty)}
+              className="flex-1 sm:flex-none px-4 py-2.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            >
+              <DollarSign className="w-3.5 h-3.5 text-emerald-700" />
+              <span>Make an Offer</span>
+            </button>
+            <button
               id="detail-modal-book-viewing"
               onClick={handleBookViewing}
-              className="flex-1 sm:flex-none px-6 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              className="flex-1 sm:flex-none px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-emerald-700/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
             >
               <Calendar className="w-4 h-4" />
-              <span>Schedule a Viewing</span>
+              <span>Schedule Tour</span>
             </button>
           </div>
         </div>

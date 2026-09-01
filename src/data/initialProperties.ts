@@ -25,6 +25,26 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "sarah.realtor@homevista.com",
     ownerPhone: "+1 (305) 555-0192",
     featured: true,
+    coordinates: { lat: 25.7781, lng: -80.1313 },
+    neighborhoodRadar: {
+      walkScore: 92,
+      walkScoreLabel: "Walker's Paradise (Daily errands do not require a car)",
+      transitScore: 84,
+      transitScoreLabel: "Excellent Transit (Transit is convenient for most trips)",
+      safetyScore: 94,
+      safetyLabel: "Top 5% Safest (Gated & 24/7 Monitored Coastal District)",
+      schoolsRating: 9.2,
+      schoolsLabel: "A+ Rated School District",
+      noiseLevel: "Peaceful Coastal (34 dB)",
+      nearbyPlaces: [
+        { name: "Miami Beach Senior High & Preparatory", category: "school", distance: "0.4 mi", timeWalk: "8 min walk", rating: 9.4 },
+        { name: "South Beach Transit Hub & Metrobus", category: "transit", distance: "0.2 mi", timeWalk: "4 min walk", rating: 4.8 },
+        { name: "Whole Foods Market & Artisan Grocery", category: "grocery", distance: "0.3 mi", timeWalk: "6 min walk", rating: 4.9 },
+        { name: "Lummus Oceanfront Park & Boardwalk", category: "park", distance: "0.1 mi", timeWalk: "2 min walk", rating: 4.9 },
+        { name: "Mount Sinai Medical Center", category: "hospital", distance: "1.8 mi", timeWalk: "5 min drive", rating: 4.8 },
+        { name: "Joe's Stone Crab & Ocean Bistro", category: "restaurant", distance: "0.2 mi", timeWalk: "5 min walk", rating: 4.9 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 5
   },
   {
@@ -51,6 +71,26 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "david.m@homevista.com",
     ownerPhone: "+1 (212) 555-0144",
     featured: true,
+    coordinates: { lat: 40.7535, lng: -73.9754 },
+    neighborhoodRadar: {
+      walkScore: 99,
+      walkScoreLabel: "Walker's Paradise (Daily errands require no car)",
+      transitScore: 100,
+      transitScoreLabel: "Rider's Paradise (Grand Central 4/5/6/7/S Subway Lines)",
+      safetyScore: 91,
+      safetyLabel: "High Safety Index (Midtown Corporate Patrol)",
+      schoolsRating: 9.6,
+      schoolsLabel: "Top-Tier Manhattan Academic Zone",
+      noiseLevel: "Urban Soundproofed (42 dB inside)",
+      nearbyPlaces: [
+        { name: "Grand Central Terminal & Subway Lines 4, 5, 6, 7", category: "transit", distance: "0.1 mi", timeWalk: "2 min walk", rating: 4.9 },
+        { name: "The Beekman International School", category: "school", distance: "0.3 mi", timeWalk: "6 min walk", rating: 9.5 },
+        { name: "Trader Joe's & Grand Central Market", category: "grocery", distance: "0.2 mi", timeWalk: "4 min walk", rating: 4.8 },
+        { name: "Bryant Park & NYC Public Library", category: "park", distance: "0.4 mi", timeWalk: "7 min walk", rating: 4.9 },
+        { name: "NYU Langone Medical Health", category: "hospital", distance: "0.8 mi", timeWalk: "12 min walk", rating: 4.9 },
+        { name: "Blue Bottle Coffee & Artisanal Bakery", category: "cafe", distance: "0.05 mi", timeWalk: "1 min walk", rating: 4.8 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 4
   },
   {
@@ -77,6 +117,25 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "elena.vance@homevista.com",
     ownerPhone: "+1 (512) 555-0188",
     featured: true,
+    coordinates: { lat: 30.2985, lng: -97.7420 },
+    neighborhoodRadar: {
+      walkScore: 81,
+      walkScoreLabel: "Very Walkable (Biking & Walking Friendly)",
+      transitScore: 72,
+      transitScoreLabel: "Good Transit (CapMetro Route 803 Rapid)",
+      safetyScore: 96,
+      safetyLabel: "Top 3% Safest (Family Friendly Neighborhood)",
+      schoolsRating: 9.5,
+      schoolsLabel: "Austin ISD Exemplary Blue Ribbon",
+      noiseLevel: "Serene & Quiet (30 dB)",
+      nearbyPlaces: [
+        { name: "Casis Elementary & Austin High School", category: "school", distance: "0.3 mi", timeWalk: "6 min walk", rating: 9.7 },
+        { name: "Central Market Gourmet & Cafe", category: "grocery", distance: "0.5 mi", timeWalk: "10 min walk", rating: 4.9 },
+        { name: "Shoal Creek Greenbelt Trail & Park", category: "park", distance: "0.2 mi", timeWalk: "5 min walk", rating: 4.8 },
+        { name: "Seton Medical Center Austin", category: "hospital", distance: "0.9 mi", timeWalk: "3 min drive", rating: 4.7 },
+        { name: "Mozart's Coffee Roasters & Bakery", category: "cafe", distance: "0.6 mi", timeWalk: "12 min walk", rating: 4.9 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 3
   },
   {
@@ -102,6 +161,25 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "robert.fox@homevista.com",
     ownerPhone: "+1 (312) 555-0167",
     featured: true,
+    coordinates: { lat: 41.8860, lng: -87.6247 },
+    neighborhoodRadar: {
+      walkScore: 98,
+      walkScoreLabel: "Walker's Paradise (The Magnificent Mile & Loop)",
+      transitScore: 97,
+      transitScoreLabel: "Rider's Paradise (CTA Red, Blue, Brown Lines)",
+      safetyScore: 90,
+      safetyLabel: "Monitored High-Rise Security Corridor",
+      schoolsRating: 9.1,
+      schoolsLabel: "Ogden International & Chicago Prep",
+      noiseLevel: "Urban Soundproofed (40 dB)",
+      nearbyPlaces: [
+        { name: "Millennium Park & Cloud Gate (The Bean)", category: "park", distance: "0.2 mi", timeWalk: "4 min walk", rating: 4.9 },
+        { name: "State/Lake CTA Loop Station", category: "transit", distance: "0.15 mi", timeWalk: "3 min walk", rating: 4.8 },
+        { name: "Target Urban Express & Mariano's", category: "grocery", distance: "0.25 mi", timeWalk: "5 min walk", rating: 4.7 },
+        { name: "Northwestern Memorial Hospital", category: "hospital", distance: "0.6 mi", timeWalk: "10 min walk", rating: 4.9 },
+        { name: "The Chicago Riverwalk & Dining", category: "restaurant", distance: "0.1 mi", timeWalk: "2 min walk", rating: 4.9 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 2
   },
   {
@@ -127,6 +205,25 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "amanda.clark@homevista.com",
     ownerPhone: "+1 (312) 555-0199",
     featured: true,
+    coordinates: { lat: 41.9214, lng: -87.6375 },
+    neighborhoodRadar: {
+      walkScore: 94,
+      walkScoreLabel: "Walker's Paradise (Historic Lincoln Park Avenue)",
+      transitScore: 89,
+      transitScoreLabel: "Excellent Transit (Sedgwick Brown/Purple Line)",
+      safetyScore: 95,
+      safetyLabel: "Top Tier Historic District Safety",
+      schoolsRating: 9.6,
+      schoolsLabel: "Lincoln Elementary & Francis W. Parker",
+      noiseLevel: "Tree-Lined & Quiet (32 dB)",
+      nearbyPlaces: [
+        { name: "Lincoln Park Zoo & Botanical Gardens", category: "park", distance: "0.15 mi", timeWalk: "3 min walk", rating: 4.9 },
+        { name: "Lincoln Elementary Blue Ribbon School", category: "school", distance: "0.2 mi", timeWalk: "4 min walk", rating: 9.8 },
+        { name: "Trader Joe's Lincoln Park", category: "grocery", distance: "0.35 mi", timeWalk: "7 min walk", rating: 4.8 },
+        { name: "Fullerton / Sedgwick CTA Station", category: "transit", distance: "0.4 mi", timeWalk: "8 min walk", rating: 4.7 },
+        { name: "Armitage Avenue Boutique Cafes", category: "cafe", distance: "0.2 mi", timeWalk: "4 min walk", rating: 4.9 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 1
   },
   {
@@ -154,6 +251,24 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "marcus.s@homevista.com",
     ownerPhone: "+1 (480) 555-0177",
     featured: false,
+    coordinates: { lat: 33.5092, lng: -111.8990 },
+    neighborhoodRadar: {
+      walkScore: 68,
+      walkScoreLabel: "Somewhat Walkable (Gated Mountain Reserve)",
+      transitScore: 62,
+      transitScoreLabel: "Scottsdale Trolley & Valley Transit",
+      safetyScore: 98,
+      safetyLabel: "Private Gated Community (24/7 Guard)",
+      schoolsRating: 9.3,
+      schoolsLabel: "Scottsdale Unified School District",
+      noiseLevel: "Ultra Peaceful Nature Sanctuary (24 dB)",
+      nearbyPlaces: [
+        { name: "Camelback Mountain Trailhead & Preserve", category: "park", distance: "0.8 mi", timeWalk: "15 min walk", rating: 4.9 },
+        { name: "Chaparral High School & BASIS Scottsdale", category: "school", distance: "1.2 mi", timeWalk: "4 min drive", rating: 9.8 },
+        { name: "Scottsdale Fashion Square & AJ's Fine Foods", category: "grocery", distance: "1.5 mi", timeWalk: "5 min drive", rating: 4.8 },
+        { name: "HonorHealth Scottsdale Osborn Medical", category: "hospital", distance: "2.0 mi", timeWalk: "6 min drive", rating: 4.7 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 6
   },
   {
@@ -179,6 +294,25 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "victoria@homevista.com",
     ownerPhone: "+1 (310) 555-0122",
     featured: true,
+    coordinates: { lat: 34.0900, lng: -118.4065 },
+    neighborhoodRadar: {
+      walkScore: 82,
+      walkScoreLabel: "Very Walkable (Beverly Hills Golden Triangle)",
+      transitScore: 78,
+      transitScoreLabel: "Metro D Line (Purple) Extension",
+      safetyScore: 97,
+      safetyLabel: "Top 1% Safest (Beverly Hills Police Patrol)",
+      schoolsRating: 9.8,
+      schoolsLabel: "Beverly Hills Unified Exemplary",
+      noiseLevel: "Quiet Gated Hills (28 dB)",
+      nearbyPlaces: [
+        { name: "Beverly Hills High School & Hawthorne", category: "school", distance: "0.6 mi", timeWalk: "10 min walk", rating: 9.9 },
+        { name: "Rodeo Drive Luxury Boulevard", category: "restaurant", distance: "0.5 mi", timeWalk: "9 min walk", rating: 4.9 },
+        { name: "Bristol Farms Gourmet Organic Market", category: "grocery", distance: "0.7 mi", timeWalk: "12 min walk", rating: 4.8 },
+        { name: "Coldwater Canyon Park & Nature Trails", category: "park", distance: "0.4 mi", timeWalk: "8 min walk", rating: 4.9 },
+        { name: "Cedars-Sinai Medical Center", category: "hospital", distance: "1.4 mi", timeWalk: "5 min drive", rating: 4.9 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 7
   },
   {
@@ -205,6 +339,25 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     ownerEmail: "liam.h@homevista.com",
     ownerPhone: "+1 (303) 555-0155",
     featured: false,
+    coordinates: { lat: 40.0150, lng: -105.2705 },
+    neighborhoodRadar: {
+      walkScore: 70,
+      walkScoreLabel: "Somewhat Walkable (Biking Paradise)",
+      transitScore: 68,
+      transitScoreLabel: "RTD Boulder Transit & Hop Bus",
+      safetyScore: 96,
+      safetyLabel: "Very Safe (Low Density Rocky Mountain Foothills)",
+      schoolsRating: 9.4,
+      schoolsLabel: "Boulder Valley School District",
+      noiseLevel: "Pure Alpine Silence (22 dB)",
+      nearbyPlaces: [
+        { name: "Boulder High School & University of Colorado", category: "school", distance: "1.1 mi", timeWalk: "4 min drive", rating: 9.6 },
+        { name: "Chautauqua Park & Flatirons Trailhead", category: "park", distance: "0.5 mi", timeWalk: "10 min walk", rating: 4.9 },
+        { name: "Alfalfa's & Natural Grocers", category: "grocery", distance: "0.9 mi", timeWalk: "15 min walk", rating: 4.8 },
+        { name: "Boulder Community Health Hospital", category: "hospital", distance: "1.8 mi", timeWalk: "6 min drive", rating: 4.8 },
+        { name: "Pearl Street Mall Cafes & Microbreweries", category: "restaurant", distance: "1.2 mi", timeWalk: "5 min drive", rating: 4.9 }
+      ]
+    },
     createdAt: Date.now() - 86400000 * 8
   }
 ];

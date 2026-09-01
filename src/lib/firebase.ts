@@ -26,15 +26,30 @@ import {
   serverTimestamp,
   Firestore
 } from 'firebase/firestore';
-import firebaseConfigData from '../../firebase-applet-config.json';
+interface FirebaseConfigShape {
+  apiKey?: string;
+  authDomain?: string;
+  projectId?: string;
+  storageBucket?: string;
+  messagingSenderId?: string;
+  appId?: string;
+  firestoreDatabaseId?: string;
+}
+
+// Safely load optional firebase-applet-config.json if it exists, without throwing Vite import errors if deleted
+const configModules = import.meta.glob<{ default: FirebaseConfigShape }>(
+  '../../firebase-applet-config.json',
+  { eager: true }
+);
+const fileConfig: FirebaseConfigShape = configModules['../../firebase-applet-config.json']?.default || {};
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || firebaseConfigData.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || firebaseConfigData.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || firebaseConfigData.projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || firebaseConfigData.storageBucket,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseConfigData.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || firebaseConfigData.appId
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || fileConfig.apiKey || 'AIzaSyDemoPlaceholderKey123456789',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || fileConfig.authDomain || 'homevista-demo.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || fileConfig.projectId || 'homevista-demo',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || fileConfig.storageBucket || 'homevista-demo.appspot.com',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || fileConfig.messagingSenderId || '123456789012',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || fileConfig.appId || '1:123456789012:web:demoappid12345'
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -43,8 +58,8 @@ export const googleProvider = new GoogleAuthProvider();
 
 // Initialize Firestore with specific databaseId if provided
 const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID || (
-  firebaseConfigData.firestoreDatabaseId && firebaseConfigData.firestoreDatabaseId !== '(default)'
-    ? firebaseConfigData.firestoreDatabaseId
+  fileConfig.firestoreDatabaseId && fileConfig.firestoreDatabaseId !== '(default)'
+    ? fileConfig.firestoreDatabaseId
     : undefined
 );
 

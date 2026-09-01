@@ -1,6 +1,6 @@
 {
   "name": "HomeVista - Real Estate Platform",
-  "description": "Find your dream home with verified property listings, viewing bookings, and property management.",
+  "description": "Find your dream home with verified property listings, live agent direct messaging, formal offer negotiations, viewing bookings, interactive maps, and neighborhood radar analytics.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

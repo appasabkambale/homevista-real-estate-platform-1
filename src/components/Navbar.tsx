@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Home, Heart, User as UserIcon, PlusCircle, ChevronDown, LogOut, Building2, Calendar, Menu, X, ShieldCheck } from 'lucide-react';
+import { Home, Heart, User as UserIcon, PlusCircle, ChevronDown, LogOut, Building2, Calendar, Menu, X, ShieldCheck, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProperties } from '../context/PropertyContext';
+import { useChat } from '../context/ChatContext';
 
 export const Navbar: React.FC = () => {
   const { user, userProfile, logout, setAuthModalOpen, setAuthMode } = useAuth();
@@ -15,6 +16,7 @@ export const Navbar: React.FC = () => {
     userBookings,
     setFilters
   } = useProperties();
+  const { openChatModal, totalUnreadCount, conversations } = useChat();
 
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -166,6 +168,22 @@ export const Navbar: React.FC = () => {
           {/* Right Action Icons & List Property Button */}
           <div className="flex items-center space-x-3">
             
+            {/* Direct Messages Icon Button */}
+            <button
+              id="nav-messages-button"
+              onClick={() => openChatModal()}
+              className="relative p-2.5 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full transition-colors cursor-pointer"
+              title="Direct Inquiries & Messages"
+              aria-label="Messages"
+            >
+              <MessageSquare className="w-5 h-5" />
+              {totalUnreadCount > 0 && (
+                <span className="absolute top-1 right-1 bg-emerald-600 text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
+                  {totalUnreadCount}
+                </span>
+              )}
+            </button>
+
             {/* Favorites Icon */}
             <button 
               id="nav-favorites-button"
@@ -219,6 +237,28 @@ export const Navbar: React.FC = () => {
                       </div>
 
                       <div className="py-1">
+                        <button
+                          onClick={() => {
+                            setUserDropdownOpen(false);
+                            openChatModal();
+                          }}
+                          className="w-full px-4 py-2 text-left text-xs font-medium text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <MessageSquare className="w-4 h-4 text-emerald-600" />
+                            <span>Messages & Offers</span>
+                          </div>
+                          {totalUnreadCount > 0 ? (
+                            <span className="bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                              {totalUnreadCount}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 font-semibold">
+                              {conversations.length}
+                            </span>
+                          )}
+                        </button>
+
                         <button
                           onClick={() => {
                             setUserDropdownOpen(false);
@@ -350,6 +390,23 @@ export const Navbar: React.FC = () => {
               className="block w-full text-left px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-lg"
             >
               Plots & Land
+            </button>
+            <button 
+              onClick={() => {
+                openChatModal();
+                setMobileMenuOpen(false);
+              }}
+              className="block w-full text-left px-3 py-2 text-sm font-semibold text-emerald-800 bg-emerald-50 rounded-lg flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-emerald-600" />
+                <span>Direct Messages & Inquiries</span>
+              </div>
+              {totalUnreadCount > 0 && (
+                <span className="bg-emerald-600 text-white text-xs font-extrabold px-2 py-0.5 rounded-full">
+                  {totalUnreadCount} new
+                </span>
+              )}
             </button>
             {user && (
               <>

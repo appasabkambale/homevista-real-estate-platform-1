@@ -14,6 +14,7 @@ import {
 import { Property, Booking, FilterState, PropertyCategory, ListingStatus } from '../types';
 import { INITIAL_PROPERTIES } from '../data/initialProperties';
 import { useAuth } from './AuthContext';
+import { getCoordinatesForLocation, generateNeighborhoodRadar } from '../utils/radarGenerator';
 
 interface PropertyContextType {
   properties: Property[];
@@ -138,16 +139,28 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           setLoadingProperties(false);
         }
       } else {
-        const loadedProps: Property[] = snapshot.docs.map(docSnap => ({
-          id: docSnap.id,
-          ...docSnap.data()
-        } as Property));
+        const loadedProps: Property[] = snapshot.docs.map(docSnap => {
+          const data = docSnap.data() as Omit<Property, 'id'>;
+          const coords = data.coordinates || getCoordinatesForLocation(data.city, data.location);
+          const radar = data.neighborhoodRadar || generateNeighborhoodRadar(data.city || 'Austin', data.category || 'House');
+          return {
+            id: docSnap.id,
+            ...data,
+            coordinates: coords,
+            neighborhoodRadar: radar
+          };
+        });
         setProperties(loadedProps);
         setLoadingProperties(false);
       }
     }, (err) => {
       console.warn('Properties Firestore snapshot error, using initial dataset:', err);
-      setProperties(INITIAL_PROPERTIES.map((p, idx) => ({ ...p, id: `seed-${idx}` })));
+      setProperties(INITIAL_PROPERTIES.map((p, idx) => ({ 
+        ...p, 
+        id: `seed-${idx}`,
+        coordinates: p.coordinates || getCoordinatesForLocation(p.city, p.location),
+        neighborhoodRadar: p.neighborhoodRadar || generateNeighborhoodRadar(p.city, p.category)
+      })));
       setLoadingProperties(false);
     });
 
@@ -206,8 +219,13 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
 
     try {
+      const coords = propertyData.coordinates || getCoordinatesForLocation(propertyData.city, propertyData.location);
+      const radar = propertyData.neighborhoodRadar || generateNeighborhoodRadar(propertyData.city || 'Austin', propertyData.category || 'House');
+
       const newProp: Omit<Property, 'id'> = {
         ...propertyData,
+        coordinates: coords,
+        neighborhoodRadar: radar,
         ownerId: user.uid,
         ownerName: user.displayName || user.email?.split('@')[0] || 'Property Owner',
         ownerEmail: user.email || '',
@@ -225,6 +243,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const fallbackProp: Property = {
         id: fallbackId,
         ...propertyData,
+        coordinates: propertyData.coordinates || getCoordinatesForLocation(propertyData.city, propertyData.location),
+        neighborhoodRadar: propertyData.neighborhoodRadar || generateNeighborhoodRadar(propertyData.city || 'Austin', propertyData.category || 'House'),
         ownerId: user.uid,
         ownerName: user.displayName || 'Property Owner',
         ownerEmail: user.email || '',

@@ -1,6 +1,36 @@
 export type PropertyCategory = 'House' | 'Apartment' | 'Plot' | 'Villa' | 'Condo' | 'Townhouse';
 export type ListingStatus = 'For Sale' | 'For Rent';
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+export type PlaceCategory = 'school' | 'transit' | 'grocery' | 'park' | 'hospital' | 'restaurant' | 'cafe';
+
+export interface NearbyPlace {
+  id?: string;
+  name: string;
+  category: PlaceCategory;
+  distance: string; // e.g. "0.2 mi"
+  timeWalk: string; // e.g. "4 min walk"
+  rating?: number; // e.g. 4.8
+  address?: string;
+}
+
+export interface NeighborhoodRadar {
+  walkScore: number; // 0-100
+  walkScoreLabel: string; // e.g. "Walker's Paradise"
+  transitScore: number; // 0-100
+  transitScoreLabel: string; // e.g. "Rider's Paradise"
+  safetyScore: number; // 0-100
+  safetyLabel: string; // e.g. "Top 5% Safest"
+  schoolsRating: number; // 0-10 (e.g. 9.4)
+  schoolsLabel: string; // e.g. "A+ Rated District"
+  noiseLevel?: string; // e.g. "Quiet (38 dB)"
+  nearbyPlaces: NearbyPlace[];
+}
+
 export interface Property {
   id: string;
   title: string;
@@ -24,6 +54,8 @@ export interface Property {
   ownerEmail: string;
   ownerPhone?: string;
   featured?: boolean;
+  coordinates?: Coordinates;
+  neighborhoodRadar?: NeighborhoodRadar;
   createdAt: number | string;
   updatedAt?: number | string;
 }
@@ -53,6 +85,56 @@ export interface UserProfile {
   displayName: string | null;
   photoURL: string | null;
   phone?: string;
+}
+
+export type MessageType = 'text' | 'inquiry' | 'offer';
+
+export interface MessageOffer {
+  amount: number;
+  status: 'pending' | 'accepted' | 'countered' | 'declined';
+  downPaymentPercent?: number;
+  closingDays?: number;
+  contingencies?: string[];
+  terms?: string;
+  counterAmount?: number;
+}
+
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  senderName: string;
+  senderEmail: string;
+  senderRole: 'buyer' | 'owner' | 'agent';
+  text: string;
+  type: MessageType;
+  offer?: MessageOffer;
+  inquiryTopic?: string;
+  createdAt: number | string;
+  read: boolean;
+}
+
+export interface Conversation {
+  id: string;
+  propertyId: string;
+  propertyTitle: string;
+  propertyPrice: number;
+  propertyStatus: ListingStatus;
+  propertyImage: string;
+  propertyLocation: string;
+  propertyCategory: PropertyCategory;
+  buyerId: string;
+  buyerName: string;
+  buyerEmail: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  lastMessage: string;
+  lastMessageTime: number | string;
+  lastSenderId: string;
+  unreadCount?: number;
+  createdAt: number | string;
+  updatedAt: number | string;
 }
 
 export interface FilterState {
