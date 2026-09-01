@@ -26,6 +26,14 @@ import {
   serverTimestamp,
   Firestore
 } from 'firebase/firestore';
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+  FirebaseStorage
+} from 'firebase/storage';
 interface FirebaseConfigShape {
   apiKey?: string;
   authDomain?: string;
@@ -56,6 +64,9 @@ const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
+// Initialize Storage
+export const storage: FirebaseStorage = getStorage(app);
+
 // Initialize Firestore with specific databaseId if provided
 const databaseId = import.meta.env.VITE_FIREBASE_DATABASE_ID || (
   fileConfig.firestoreDatabaseId && fileConfig.firestoreDatabaseId !== '(default)'
@@ -85,6 +96,11 @@ export {
   query,
   where,
   orderBy,
-  serverTimestamp
+  serverTimestamp,
+  storageRef,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
 };
 export type { User };
+

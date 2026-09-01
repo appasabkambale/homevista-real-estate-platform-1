@@ -18,6 +18,9 @@ import { AddEditPropertyModal } from './components/AddEditPropertyModal';
 import { MyPropertiesModal } from './components/MyPropertiesModal';
 import { MyBookingsModal } from './components/MyBookingsModal';
 import { FavoritesModal } from './components/FavoritesModal';
+import { PropertyComparisonModal } from './components/PropertyComparisonModal';
+import { ComparisonFloatingBar } from './components/ComparisonFloatingBar';
+import { OwnerAnalyticsModal } from './components/OwnerAnalyticsModal';
 import { ChatModal } from './components/ChatModal';
 import { AskQuestionModal } from './components/AskQuestionModal';
 import { MakeOfferModal } from './components/MakeOfferModal';
@@ -52,6 +55,9 @@ export default function App() {
             {/* Interactive Modals & Dashboards */}
             <AuthModal />
             <PropertyDetailModal />
+            <PropertyComparisonModal />
+            <ComparisonFloatingBar />
+            <OwnerAnalyticsModal />
             <BookingModal />
             <AddEditPropertyModal />
             <MyPropertiesModal />

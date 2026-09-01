@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Heart, User as UserIcon, PlusCircle, ChevronDown, LogOut, Building2, Calendar, Menu, X, ShieldCheck, MessageSquare } from 'lucide-react';
+import { Home, Heart, User as UserIcon, PlusCircle, ChevronDown, LogOut, Building2, Calendar, Menu, X, ShieldCheck, MessageSquare, Scale, BarChart3 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProperties } from '../context/PropertyContext';
 import { useChat } from '../context/ChatContext';
@@ -8,10 +8,15 @@ export const Navbar: React.FC = () => {
   const { user, userProfile, logout, setAuthModalOpen, setAuthMode } = useAuth();
   const { 
     favorites, 
-    setIsFavoritesModalOpen, 
+    setIsFavoritesModalOpen,
+    comparisonList,
+    setIsComparisonModalOpen,
     setIsAddModalOpen, 
     setIsMyPropertiesModalOpen, 
     setIsMyBookingsModalOpen,
+    isAnalyticsModalOpen,
+    setIsAnalyticsModalOpen,
+    openAnalyticsModal,
     userProperties,
     userBookings,
     setFilters
@@ -168,6 +173,37 @@ export const Navbar: React.FC = () => {
           {/* Right Action Icons & List Property Button */}
           <div className="flex items-center space-x-3">
             
+            {/* Comparison Tool Button */}
+            <button 
+              id="nav-compare-button"
+              onClick={() => setIsComparisonModalOpen(true)}
+              className={`relative p-2.5 rounded-full transition-colors cursor-pointer ${
+                comparisonList.length > 0
+                  ? 'text-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+                  : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50'
+              }`}
+              title="Side-by-Side Property Comparison"
+              aria-label="Compare Properties"
+            >
+              <Scale className="w-5 h-5" />
+              {comparisonList.length > 0 && (
+                <span className="absolute top-1 right-1 bg-indigo-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+                  {comparisonList.length}
+                </span>
+              )}
+            </button>
+
+            {/* Owner & Agent Analytics Dashboard Button */}
+            <button
+              id="nav-analytics-button"
+              onClick={() => openAnalyticsModal()}
+              className="relative p-2.5 text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors cursor-pointer"
+              title="Owner & Agent Analytics Dashboard"
+              aria-label="Analytics Dashboard"
+            >
+              <BarChart3 className="w-5 h-5" />
+            </button>
+
             {/* Direct Messages Icon Button */}
             <button
               id="nav-messages-button"
@@ -272,6 +308,22 @@ export const Navbar: React.FC = () => {
                           </div>
                           <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
                             {userProperties.length}
+                          </span>
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setUserDropdownOpen(false);
+                            openAnalyticsModal();
+                          }}
+                          className="w-full px-4 py-2 text-left text-xs font-medium text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <BarChart3 className="w-4 h-4 text-indigo-600" />
+                            <span>Owner & Agent Analytics</span>
+                          </div>
+                          <span className="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                            Reports
                           </span>
                         </button>
 
@@ -393,6 +445,23 @@ export const Navbar: React.FC = () => {
             </button>
             <button 
               onClick={() => {
+                setIsComparisonModalOpen(true);
+                setMobileMenuOpen(false);
+              }}
+              className="block w-full text-left px-3 py-2 text-sm font-semibold text-indigo-700 bg-indigo-50/70 rounded-lg flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <Scale className="w-4 h-4 text-indigo-600" />
+                <span>Compare Properties</span>
+              </div>
+              {comparisonList.length > 0 && (
+                <span className="bg-indigo-600 text-white text-xs font-extrabold px-2 py-0.5 rounded-full">
+                  {comparisonList.length} selected
+                </span>
+              )}
+            </button>
+            <button 
+              onClick={() => {
                 openChatModal();
                 setMobileMenuOpen(false);
               }}
@@ -418,6 +487,21 @@ export const Navbar: React.FC = () => {
                   className="block w-full text-left px-3 py-2 text-sm font-medium text-emerald-700 hover:bg-emerald-50 rounded-lg"
                 >
                   My Listed Properties ({userProperties.length})
+                </button>
+                <button 
+                  onClick={() => {
+                    openAnalyticsModal();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 text-sm font-medium text-indigo-700 hover:bg-indigo-50 rounded-lg flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4 text-indigo-600" />
+                    <span>Owner & Agent Analytics</span>
+                  </div>
+                  <span className="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-0.5 rounded-full">
+                    Insights
+                  </span>
                 </button>
                 <button 
                   onClick={() => {

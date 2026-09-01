@@ -31,6 +31,12 @@ export interface NeighborhoodRadar {
   nearbyPlaces: NearbyPlace[];
 }
 
+export interface PriceHistoryPoint {
+  date: string;
+  price: number;
+  event: 'Listed' | 'Price Change' | 'Pending' | 'Sold';
+}
+
 export interface Property {
   id: string;
   title: string;
@@ -46,6 +52,13 @@ export interface Property {
   sqft: number;
   plotArea?: number; // for Plots
   zoning?: string; // for Plots
+  yearBuilt?: number;
+  hoaFeePerMonth?: number;
+  propertyTaxAnnual?: number;
+  priceHistory?: PriceHistoryPoint[];
+  viewsCount?: number;
+  bookmarksCount?: number;
+  inquiriesCount?: number;
   imageUrl: string;
   gallery?: string[];
   amenities: string[];
@@ -146,4 +159,32 @@ export interface FilterState {
   priceMax: number;
   beds: string;
   baths: string;
+}
+
+export interface DailyAnalyticsPoint {
+  date: string;
+  fullDate?: string;
+  views: number;
+  bookmarks: number;
+  inquiries: number;
+  bookings: number;
+  offers: number;
+}
+
+export interface ListingAnalyticsSummary {
+  propertyId: string;
+  propertyTitle: string;
+  propertyLocation: string;
+  propertyPrice: number;
+  propertyStatus: ListingStatus;
+  propertyCategory: PropertyCategory;
+  propertyImageUrl: string;
+  views: number;
+  bookmarks: number;
+  inquiries: number;
+  bookings: number;
+  offers: number;
+  inquiryCtr: number; // percentage e.g. 3.4
+  bookmarkRate: number; // percentage e.g. 6.2
+  leadConversionRate: number; // percentage e.g. 18.5
 }

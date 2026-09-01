@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Heart, 
@@ -19,7 +19,11 @@ import {
   MessageSquare,
   DollarSign,
   HelpCircle,
-  Sparkles
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Scale,
+  BarChart3
 } from 'lucide-react';
 import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
@@ -31,18 +35,29 @@ export const PropertyDetailModal: React.FC = () => {
     selectedProperty, 
     setSelectedProperty, 
     isFavorite, 
-    toggleFavorite, 
+    toggleFavorite,
+    isComparing,
+    toggleCompare,
+    setIsComparisonModalOpen,
     setPropertyToBook, 
     setIsBookingModalOpen,
     setPropertyToEdit,
     setIsEditModalOpen,
     deleteProperty,
+    openAnalyticsModal,
+    recordPropertyView,
     showToast
   } = useProperties();
   const { user } = useAuth();
   const { startOrOpenConversation, openMakeOfferModal, openAskQuestionModal } = useChat();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  useEffect(() => {
+    if (selectedProperty) {
+      recordPropertyView(selectedProperty.id);
+    }
+  }, [selectedProperty?.id]);
 
   if (!selectedProperty) return null;
 
@@ -52,6 +67,7 @@ export const PropertyDetailModal: React.FC = () => {
 
   const currentImage = images[activeImageIndex] || selectedProperty.imageUrl;
   const favorited = isFavorite(selectedProperty.id);
+  const comparing = isComparing(selectedProperty.id);
   const isOwner = user && (selectedProperty.ownerId === user.uid || selectedProperty.ownerEmail === user.email);
 
   const formatPrice = (price: number, status: string) => {
@@ -101,6 +117,19 @@ export const PropertyDetailModal: React.FC = () => {
 
           <div className="flex items-center gap-2">
             <button
+              onClick={() => toggleCompare(selectedProperty.id)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                comparing
+                  ? 'bg-indigo-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-600'
+              }`}
+              title={comparing ? "Remove from comparison" : "Add to side-by-side comparison"}
+            >
+              <Scale className="w-3.5 h-3.5" />
+              <span>{comparing ? 'In Comparison' : 'Compare'}</span>
+            </button>
+
+            <button
               onClick={handleShare}
               className="p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
               title="Share property"
@@ -132,15 +161,34 @@ export const PropertyDetailModal: React.FC = () => {
           
           {/* Main Photo Gallery */}
           <div className="space-y-3">
-            <div className="relative aspect-16/9 rounded-2xl overflow-hidden bg-slate-900 shadow-md">
+            <div className="relative aspect-16/9 rounded-2xl overflow-hidden bg-slate-900 shadow-md group">
               <img 
                 src={currentImage} 
                 alt={selectedProperty.title} 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-4 left-4 bg-slate-950/70 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-medium">
+              <div className="absolute bottom-4 left-4 bg-slate-950/70 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-medium pointer-events-none">
                 Photo {activeImageIndex + 1} of {images.length}
               </div>
+
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setActiveImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-950/60 hover:bg-slate-950/90 text-white backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
+                    title="Previous photo"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => setActiveImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-950/60 hover:bg-slate-950/90 text-white backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
+                    title="Next photo"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Thumbnail selector */}
@@ -325,6 +373,19 @@ export const PropertyDetailModal: React.FC = () => {
         {/* Modal Footer Actions */}
         <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2 w-full md:w-auto">
+            <button
+              onClick={() => {
+                const targetId = selectedProperty.id;
+                setSelectedProperty(null);
+                openAnalyticsModal(targetId);
+              }}
+              className="px-3.5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors cursor-pointer border border-indigo-200"
+              title="View Performance Analytics"
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Stats & Funnel</span>
+            </button>
+
             {isOwner && (
               <>
                 <button

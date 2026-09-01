@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, MapPin, Bed, Bath, Maximize2, Calendar, Edit3, Trash2, ShieldCheck, LandPlot, Footprints, MessageSquare } from 'lucide-react';
+import { Heart, MapPin, Bed, Bath, Maximize2, Calendar, Edit3, Trash2, ShieldCheck, LandPlot, Footprints, MessageSquare, Scale } from 'lucide-react';
 import { Property } from '../types';
 import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
@@ -12,19 +12,23 @@ interface PropertyCardProps {
 export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   const { 
     isFavorite, 
-    toggleFavorite, 
+    toggleFavorite,
+    isComparing,
+    toggleCompare,
     setSelectedProperty, 
     setPropertyToBook, 
     setIsBookingModalOpen,
     setPropertyToEdit,
     setIsEditModalOpen,
-    deleteProperty
+    deleteProperty,
+    recordPropertyView
   } = useProperties();
   const { user } = useAuth();
   const { startOrOpenConversation } = useChat();
 
   const isOwner = user && (property.ownerId === user.uid || property.ownerEmail === user.email);
   const favorited = isFavorite(property.id);
+  const comparing = isComparing(property.id);
 
   const formatPrice = (price: number, status: string) => {
     const formatted = new Intl.NumberFormat('en-US', {
@@ -40,6 +44,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
   };
 
   const handleCardClick = () => {
+    recordPropertyView(property.id);
     setSelectedProperty(property);
   };
 
@@ -66,7 +71,11 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     <div 
       id={`property-card-${property.id}`}
       onClick={handleCardClick}
-      className="group bg-white rounded-3xl overflow-hidden border border-slate-100/90 hover:border-emerald-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer transform hover:-translate-y-1 relative"
+      className={`group bg-white rounded-3xl overflow-hidden border shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer transform hover:-translate-y-1 relative ${
+        comparing 
+          ? 'border-indigo-500 ring-2 ring-indigo-500/30' 
+          : 'border-slate-100/90 hover:border-emerald-200'
+      }`}
     >
       {/* Image Container with Badges */}
       <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
@@ -93,8 +102,25 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           </span>
         </div>
 
-        {/* Action Buttons: Message Agent + Favorite */}
+        {/* Action Buttons: Compare + Message Agent + Favorite */}
         <div className="absolute top-3.5 right-3.5 flex items-center gap-1.5">
+          <button
+            id={`compare-btn-${property.id}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleCompare(property.id);
+            }}
+            className={`w-9 h-9 rounded-full backdrop-blur-xs flex items-center justify-center shadow-md transition-all hover:scale-110 cursor-pointer ${
+              comparing 
+                ? 'bg-indigo-600 text-white ring-2 ring-white' 
+                : 'bg-white/90 text-slate-700 hover:bg-indigo-50 hover:text-indigo-600'
+            }`}
+            title={comparing ? 'Remove from comparison' : 'Add to side-by-side comparison'}
+            aria-label="Compare property"
+          >
+            <Scale className="w-4 h-4" />
+          </button>
+
           <button
             onClick={(e) => {
               e.stopPropagation();

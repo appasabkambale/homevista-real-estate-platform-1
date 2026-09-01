@@ -13,6 +13,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     beds: 4,
     baths: 5,
     sqft: 3200,
+    yearBuilt: 2021,
+    hoaFeePerMonth: 450,
+    propertyTaxAnnual: 34200,
+    priceHistory: [
+      { date: "2024-03-15", price: 3450000, event: "Listed" },
+      { date: "2024-08-10", price: 3250000, event: "Price Change" }
+    ],
+    viewsCount: 2480,
+    bookmarksCount: 142,
+    inquiriesCount: 68,
     imageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80",
@@ -59,6 +69,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     beds: 2,
     baths: 2,
     sqft: 1250,
+    yearBuilt: 2019,
+    hoaFeePerMonth: 680,
+    propertyTaxAnnual: 0,
+    priceHistory: [
+      { date: "2023-09-01", price: 4700, event: "Listed" },
+      { date: "2024-01-15", price: 4500, event: "Price Change" }
+    ],
+    viewsCount: 3120,
+    bookmarksCount: 215,
+    inquiriesCount: 94,
     imageUrl: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
@@ -105,6 +125,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     beds: 3,
     baths: 2,
     sqft: 2100,
+    yearBuilt: 2017,
+    hoaFeePerMonth: 65,
+    propertyTaxAnnual: 14800,
+    priceHistory: [
+      { date: "2023-11-20", price: 1050000, event: "Listed" },
+      { date: "2024-02-10", price: 980000, event: "Price Change" }
+    ],
+    viewsCount: 1840,
+    bookmarksCount: 98,
+    inquiriesCount: 52,
     imageUrl: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
@@ -150,6 +180,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     beds: 2,
     baths: 2,
     sqft: 1100,
+    yearBuilt: 2018,
+    hoaFeePerMonth: 520,
+    propertyTaxAnnual: 9200,
+    priceHistory: [
+      { date: "2023-08-12", price: 710000, event: "Listed" },
+      { date: "2023-12-05", price: 680000, event: "Price Change" }
+    ],
+    viewsCount: 1460,
+    bookmarksCount: 76,
+    inquiriesCount: 39,
     imageUrl: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
@@ -194,6 +234,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     beds: 3,
     baths: 2.5,
     sqft: 1800,
+    yearBuilt: 2012,
+    hoaFeePerMonth: 220,
+    propertyTaxAnnual: 0,
+    priceHistory: [
+      { date: "2024-02-01", price: 3400, event: "Listed" },
+      { date: "2024-04-10", price: 3200, event: "Price Change" }
+    ],
+    viewsCount: 2210,
+    bookmarksCount: 118,
+    inquiriesCount: 61,
     imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
@@ -240,6 +290,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     sqft: 8500,
     plotArea: 8500,
     zoning: "R-1 Residential (Single Family)",
+    yearBuilt: 2024,
+    hoaFeePerMonth: 85,
+    propertyTaxAnnual: 3100,
+    priceHistory: [
+      { date: "2024-01-10", price: 440000, event: "Listed" },
+      { date: "2024-03-22", price: 420000, event: "Price Change" }
+    ],
+    viewsCount: 940,
+    bookmarksCount: 42,
+    inquiriesCount: 23,
     imageUrl: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
@@ -283,6 +343,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     beds: 5,
     baths: 6,
     sqft: 4800,
+    yearBuilt: 2022,
+    hoaFeePerMonth: 380,
+    propertyTaxAnnual: 29400,
+    priceHistory: [
+      { date: "2023-10-05", price: 2650000, event: "Listed" },
+      { date: "2024-02-18", price: 2450000, event: "Price Change" }
+    ],
+    viewsCount: 2790,
+    bookmarksCount: 164,
+    inquiriesCount: 82,
     imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
@@ -329,6 +399,16 @@ export const INITIAL_PROPERTIES: Omit<Property, 'id'>[] = [
     sqft: 12000,
     plotArea: 12000,
     zoning: "Residential Estate (R-E)",
+    yearBuilt: 2023,
+    hoaFeePerMonth: 50,
+    propertyTaxAnnual: 2200,
+    priceHistory: [
+      { date: "2024-02-14", price: 325000, event: "Listed" },
+      { date: "2024-05-01", price: 310000, event: "Price Change" }
+    ],
+    viewsCount: 780,
+    bookmarksCount: 38,
+    inquiriesCount: 18,
     imageUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
     gallery: [
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"

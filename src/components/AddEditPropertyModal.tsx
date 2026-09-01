@@ -7,7 +7,6 @@ import {
   Bed, 
   Bath, 
   Maximize2, 
-  Image as ImageIcon, 
   Tag, 
   Check, 
   Phone,
@@ -17,6 +16,7 @@ import { useProperties } from '../context/PropertyContext';
 import { useAuth } from '../context/AuthContext';
 import { PropertyCategory, ListingStatus } from '../types';
 import { PHOTO_PRESETS } from '../data/initialProperties';
+import { ImageUploader } from './ImageUploader';
 
 const AMENITY_OPTIONS = [
   'Swimming Pool',
@@ -63,7 +63,7 @@ export const AddEditPropertyModal: React.FC = () => {
   const [sqft, setSqft] = useState<number | ''>(2000);
   const [plotArea, setPlotArea] = useState<number | ''>('');
   const [zoning, setZoning] = useState('Residential (Single-Family)');
-  const [imageUrl, setImageUrl] = useState(PHOTO_PRESETS[0].url);
+  const [photos, setPhotos] = useState<string[]>([PHOTO_PRESETS[0].url]);
   const [amenities, setAmenities] = useState<string[]>(['Garage / Parking', 'Central AC']);
   const [ownerPhone, setOwnerPhone] = useState('+1 (555) 012-3456');
   const [loading, setLoading] = useState(false);
@@ -84,7 +84,10 @@ export const AddEditPropertyModal: React.FC = () => {
       setSqft(propertyToEdit.sqft);
       setPlotArea(propertyToEdit.plotArea || '');
       setZoning(propertyToEdit.zoning || 'Residential (Single-Family)');
-      setImageUrl(propertyToEdit.imageUrl);
+      const initialPhotos = propertyToEdit.gallery && propertyToEdit.gallery.length > 0
+        ? propertyToEdit.gallery
+        : propertyToEdit.imageUrl ? [propertyToEdit.imageUrl] : [PHOTO_PRESETS[0].url];
+      setPhotos(initialPhotos);
       setAmenities(propertyToEdit.amenities || []);
       setOwnerPhone(propertyToEdit.ownerPhone || '+1 (555) 012-3456');
     } else {
@@ -102,7 +105,7 @@ export const AddEditPropertyModal: React.FC = () => {
       setSqft(2100);
       setPlotArea('');
       setZoning('Residential (Single-Family)');
-      setImageUrl(PHOTO_PRESETS[0].url);
+      setPhotos([PHOTO_PRESETS[0].url]);
       setAmenities(['Garage / Parking', 'Central AC', 'High-Speed Wifi']);
     }
   }, [isEditing, propertyToEdit, isOpen]);
@@ -124,10 +127,12 @@ export const AddEditPropertyModal: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!price || Number(price) <= 0) return;
+    if (photos.length === 0) return;
 
     setLoading(true);
 
     try {
+      const primaryCover = photos[0];
       const payload = {
         title: title.trim(),
         description: description.trim() || 'Beautiful property with premier amenities and verified documentation.',
@@ -142,8 +147,8 @@ export const AddEditPropertyModal: React.FC = () => {
         sqft: Number(sqft) || (Number(plotArea) || 2000),
         plotArea: category === 'Plot' ? (Number(plotArea) || Number(sqft) || 5000) : undefined,
         zoning: category === 'Plot' ? zoning : undefined,
-        imageUrl: imageUrl.trim(),
-        gallery: [imageUrl.trim()],
+        imageUrl: primaryCover,
+        gallery: photos,
         amenities,
         ownerPhone: ownerPhone.trim()
       };
@@ -381,41 +386,13 @@ export const AddEditPropertyModal: React.FC = () => {
             </div>
           )}
 
-          {/* Photo Presets & Custom URL */}
-          <div className="space-y-2.5">
-            <label className="block text-xs font-bold text-slate-700">
-              Property Image (Pick from Curated Presets or Paste URL)
-            </label>
-            
-            {/* Presets Grid */}
-            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
-              {PHOTO_PRESETS.map((preset, idx) => (
-                <button
-                  type="button"
-                  key={idx}
-                  onClick={() => setImageUrl(preset.url)}
-                  className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                    imageUrl === preset.url ? 'border-emerald-600 ring-2 ring-emerald-400/40' : 'border-transparent opacity-75 hover:opacity-100'
-                  }`}
-                  title={preset.label}
-                >
-                  <img src={preset.url} alt={preset.label} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-
-            {/* Custom URL Input */}
-            <div className="relative mt-2">
-              <ImageIcon className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="url"
-                required
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
+          {/* Photo Upload & Gallery with Drag-to-Reorder */}
+          <div className="pt-1">
+            <ImageUploader 
+              images={photos} 
+              onChange={setPhotos} 
+              userId={user?.uid || 'user'} 
+            />
           </div>
 
           {/* Description */}

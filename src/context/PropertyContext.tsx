@@ -26,6 +26,22 @@ interface PropertyContextType {
   favorites: string[];
   toggleFavorite: (propertyId: string) => void;
   isFavorite: (propertyId: string) => boolean;
+
+  // Comparison Tool
+  comparisonList: string[];
+  toggleCompare: (propertyId: string) => void;
+  isComparing: (propertyId: string) => boolean;
+  clearComparison: () => void;
+  isComparisonModalOpen: boolean;
+  setIsComparisonModalOpen: (open: boolean) => void;
+
+  // Owner / Agent Analytics
+  isAnalyticsModalOpen: boolean;
+  setIsAnalyticsModalOpen: (open: boolean) => void;
+  selectedAnalyticsPropertyId: string | 'all';
+  setSelectedAnalyticsPropertyId: (id: string | 'all') => void;
+  openAnalyticsModal: (propertyId?: string) => void;
+  recordPropertyView: (propertyId: string) => void;
   
   // Property CRUD
   addProperty: (propertyData: Omit<Property, 'id' | 'createdAt' | 'ownerId' | 'ownerName' | 'ownerEmail'>) => Promise<string>;
@@ -97,6 +113,16 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   });
 
+  const [comparisonList, setComparisonList] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('homevista_comparison');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   
@@ -109,6 +135,51 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isMyPropertiesModalOpen, setIsMyPropertiesModalOpen] = useState(false);
   const [isMyBookingsModalOpen, setIsMyBookingsModalOpen] = useState(false);
   const [isFavoritesModalOpen, setIsFavoritesModalOpen] = useState(false);
+  const [isAnalyticsModalOpen, setIsAnalyticsModalOpen] = useState(false);
+  const [selectedAnalyticsPropertyId, setSelectedAnalyticsPropertyId] = useState<string | 'all'>('all');
+
+  // Track extra live local views for properties
+  const [liveViews, setLiveViews] = useState<Record<string, number>>(() => {
+    try {
+      const saved = localStorage.getItem('homevista_property_views');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const recordPropertyView = (propertyId: string) => {
+    if (!propertyId) return;
+    setLiveViews(prev => {
+      const updated = { ...prev, [propertyId]: (prev[propertyId] || 0) + 1 };
+      try {
+        localStorage.setItem('homevista_property_views', JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      return updated;
+    });
+
+    // Also update properties in state if present
+    setProperties(prev => prev.map(p => {
+      if (p.id === propertyId) {
+        return {
+          ...p,
+          viewsCount: (p.viewsCount || 0) + 1
+        };
+      }
+      return p;
+    }));
+  };
+
+  const openAnalyticsModal = (propertyId?: string) => {
+    if (propertyId) {
+      setSelectedAnalyticsPropertyId(propertyId);
+    } else {
+      setSelectedAnalyticsPropertyId('all');
+    }
+    setIsAnalyticsModalOpen(true);
+  };
 
   // Toast
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
@@ -196,6 +267,15 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [favorites]);
 
+  // Save comparison to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('homevista_comparison', JSON.stringify(comparisonList));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [comparisonList]);
+
   const toggleFavorite = (propertyId: string) => {
     setFavorites(prev => {
       const exists = prev.includes(propertyId);
@@ -210,6 +290,28 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const isFavorite = (propertyId: string) => favorites.includes(propertyId);
+
+  const toggleCompare = (propertyId: string) => {
+    setComparisonList(prev => {
+      if (prev.includes(propertyId)) {
+        showToast('Removed from comparison', 'info');
+        return prev.filter(id => id !== propertyId);
+      }
+      if (prev.length >= 4) {
+        showToast('You can compare up to 4 properties at once', 'error');
+        return prev;
+      }
+      showToast('Added to comparison tool ⚖️', 'success');
+      return [...prev, propertyId];
+    });
+  };
+
+  const isComparing = (propertyId: string) => comparisonList.includes(propertyId);
+
+  const clearComparison = () => {
+    setComparisonList([]);
+    showToast('Comparison list cleared', 'info');
+  };
 
   // Property CRUD
   const addProperty = async (propertyData: Omit<Property, 'id' | 'createdAt' | 'ownerId' | 'ownerName' | 'ownerEmail'>) => {
@@ -422,6 +524,18 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       favorites,
       toggleFavorite,
       isFavorite,
+      comparisonList,
+      toggleCompare,
+      isComparing,
+      clearComparison,
+      isComparisonModalOpen,
+      setIsComparisonModalOpen,
+      isAnalyticsModalOpen,
+      setIsAnalyticsModalOpen,
+      selectedAnalyticsPropertyId,
+      setSelectedAnalyticsPropertyId,
+      openAnalyticsModal,
+      recordPropertyView,
       addProperty,
       updateProperty,
       deleteProperty,
