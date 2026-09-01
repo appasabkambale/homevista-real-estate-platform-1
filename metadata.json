@@ -1,0 +1,6 @@
+{
+  "name": "HomeVista - Real Estate Platform",
+  "description": "Find your dream home with verified property listings, viewing bookings, and property management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
